@@ -4,6 +4,7 @@
 (in-package :pf-chain-climber)
 
 ; Set up globals
+(defparameter *difficulty* nil)
 (defparameter *pfccmonsters* '())
 (defparameter *playername* nil)
 (defparameter *playerxp* 0)
@@ -102,8 +103,11 @@
   (setf *playerkills* '())
   (setf *playerxp* 0)
   (when (not *playername*) (get-player-name))
+  (when (not *difficulty*) (setf *difficulty* (select "Difficulty:" (list :easy :normal :hard))))
   (setf *pfccmonsters* (sort (init-monsters (copy-list engine:*monsters*)) #'< :key #'car))
   (set-starting-form *pfccmonsters*))
+;  (case *difficulty* ; TODO: change hit points based on difficulty
+;    (:easy )
 
 (defun run-round ()
   (let* ((opponent-forms (find-opponent *playerform* *pfccmonsters*))
