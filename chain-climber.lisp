@@ -5,6 +5,7 @@
 
 ; Set up globals
 (defparameter *difficulty* nil)
+(defparameter *difficultymap* '((:easy . :max) (:normal . :half) (:hard . :rolled)))
 (defparameter *pfccmonsters* '())
 (defparameter *playername* nil)
 (defparameter *playerxp* 0)
@@ -30,7 +31,8 @@
   (make-instance (make-anonymous 'engine:game-class 
 				 (list (class-of form)
 				       (find-class (if pc 'player 'npc))))
-		 :name (if pc *playername* (name form))))
+		 :name (if pc *playername* (name form))
+		 :hp-method (when pc (cdr (assoc *difficulty* *difficultymap*)))))
 
 (defun set-starting-form (monsters)
   (let* ((forms (remove-if-not #'(lambda (x) (melee x)) (cadar monsters)))
@@ -103,7 +105,7 @@
   (setf *playerkills* '())
   (setf *playerxp* 0)
   (when (not *playername*) (get-player-name))
-  (when (not *difficulty*) (setf *difficulty* (select "Difficulty:" (list :easy :normal :hard))))
+  (when (not *difficulty*) (setf *difficulty* (select "Difficulty:" (mapcar #'car *difficultymap*))))
   (setf *pfccmonsters* (sort (init-monsters (copy-list engine:*monsters*)) #'< :key #'car))
   (set-starting-form *pfccmonsters*))
 ;  (case *difficulty* ; TODO: change hit points based on difficulty
@@ -122,7 +124,7 @@
 	    (when newform
 	      (setf *playerform* (make-form newform t))))
 	  (mapcar #'(lambda (x) (restore-creature (car x))) participants)
-	  (format t "Participants: ~A~%" participants)
+;	  (format t "Participants: ~A~%" participants)
 	  *playerform*))))
 
 (defun play ()
