@@ -9,7 +9,7 @@
 
 (defsystem pf-arena
   :name "pf-arena"
-  :version "0.0.0"
+  :version "0.0.1"
   :maintainer "Oladon"
   :author "Oladon"
   :description "A text-based game."

@@ -1,5 +1,6 @@
 (defpackage :pf-arena
-  (:use :common-lisp :engine #+sbcl sb-mop #+clisp clos #+clisp mop)
+  (:use :common-lisp 
+        #+sbcl sb-mop #+clisp clos #+clisp mop)
   (:export pfcc-player difficulty kills xp-earned restore-creature
 	   *pfccmonsters* *difficultymap* play pick-starting-form init-monsters 
 	   change-form make-form update-form valid-name play))
